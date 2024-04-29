@@ -23,7 +23,11 @@ void inicializar_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]) {
     for (int i = 0; i < TAM_TABLERO; i++) {
         tablero[1][i] = (Pieza){PEON, BLANCO};
     }
-
+     for (int i = 2; i < 6; i++){
+        for (int j= 0; j< TAM_TABLERO; j++){
+            tablero[i][j]= (Pieza){VACIO};
+        }
+     }
     // Inicializar las piezas negras
     tablero[7][0] = (Pieza){TORRE, NEGRO};
     tablero[7][1] = (Pieza){CABALLO, NEGRO};
@@ -90,7 +94,7 @@ void imprimir_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]) {
                         break;
                 }
             }
-            printf(" "); // Separador entre columnas
+            printf("  "); // Separador entre columnas
         }
         printf("\n"); // Nueva línea para cada fila
     }
