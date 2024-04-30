@@ -8,11 +8,12 @@ typedef enum {
     TURNO_NEGRAS,
     VICTORIA_BLANCAS,
     VICTORIA_NEGRAS,
-    EMPATE
+    EMPATE,
+    JUEGO_TERMINADO
 } EstadoJuego;
 //Funcionar manejar turnos
-EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO][TAM_TABLERO]);
-
+EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]);
+//Función para realizar movimientos
 int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color);
 //Funcion para manejar movimientos de todas las fichas 
 int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_origen, int columna_origen, int fila_destino, int columna_destino);
