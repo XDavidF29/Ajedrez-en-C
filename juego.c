@@ -7,6 +7,7 @@ EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO]
     switch (estado_actual) {
         case TURNO_BLANCAS:
             printf("Turno de las Blancas.\n");
+            imprimir_simbolos();
 
             // Copiar el tablero antes de realizar cualquier movimiento
             copiar_tablero(tablero, tablero_copia);
@@ -33,6 +34,7 @@ EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO]
             }
         case TURNO_NEGRAS:
             printf("Turno de las Negras.\n");
+            imprimir_simbolos();
 
             // Copiar el tablero antes de realizar cualquier movimiento
             copiar_tablero(tablero, tablero_copia);

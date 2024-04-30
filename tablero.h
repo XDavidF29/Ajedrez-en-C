@@ -27,5 +27,5 @@ typedef struct {
 //Declaración de funciones
 void inicializar_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]);
 void imprimir_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]);
-
+void imprimir_simbolos();
 #endif //TABLERO_H

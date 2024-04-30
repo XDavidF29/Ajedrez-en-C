@@ -41,61 +41,97 @@ void inicializar_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]) {
         tablero[6][i] = (Pieza){PEON, NEGRO};
     }
 }
+
 void imprimir_tablero(Pieza tablero[TAM_TABLERO][TAM_TABLERO]) {
+    printf("    ");
     for (int i = 0; i < TAM_TABLERO; i++) {
-        for (int j = 0; j < TAM_TABLERO; j++) {
-            // Imprimir las piezas en el tablero
-            if (tablero[i][j].color == BLANCO) {
-                switch (tablero[i][j].tipo) {
-                    case VACIO:
-                        printf("-");
-                        break;
-                    case PEON:
-                        printf("P");
-                        break;
-                    case TORRE:
-                        printf("T");
-                        break;
-                    case CABALLO:
-                        printf("C");
-                        break;
-                    case ALFIL:
-                        printf("A");
-                        break;
-                    case REINA:
-                        printf("D");
-                        break;
-                    case REY:
-                        printf("R");
-                        break;
-                }
-            } else if (tablero[i][j].color == NEGRO) {
-                switch (tablero[i][j].tipo) {
-                    case VACIO:                            
-                        printf("-");
-                        break;
-                    case PEON:
-                        printf("p");
-                        break;
-                    case TORRE:
-                        printf("t");
-                        break;
-                    case CABALLO:
-                        printf("c");
-                        break;
-                    case ALFIL:
-                        printf("a");
-                        break;
-                    case REINA:
-                        printf("d");
-                        break;
-                    case REY:
-                        printf("r");
-                        break;
-                }
-            }
-            printf("  "); // Separador entre columnas
-        }
-        printf("\n"); // Nueva línea para cada fila
+        printf("  %d   ", i);
     }
+    printf("\n");
+    for (int i = 0; i < TAM_TABLERO; i++) {
+        printf("  ");
+        for (int k = 0; k < TAM_TABLERO; k++) {
+            printf("+-----");
+        }
+        printf("+\n");
+
+        printf(" %d ", i);
+        for (int j = 0; j < TAM_TABLERO; j++) {
+            printf("|");
+            if ((i + j) % 2 == 0) { // Si la suma de las coordenadas es par
+                printf("\033[47m\033[30m"); // Fondo blanco, texto negro
+            } else {
+                printf("\033[40m\033[37m"); // Fondo negro, texto blanco
+            }
+            switch (tablero[i][j].color) {
+                case BLANCO:
+                    switch (tablero[i][j].tipo) {
+                        case VACIO:
+                            printf("     ");
+                            break;
+                        case PEON:
+                            printf("\033[1;31m  \u25A0  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                        case TORRE:
+                            printf("\033[1;31m  \u2660  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                        case CABALLO:
+                            printf("\033[1;31m  \xC2\xA7  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                        case ALFIL:
+                            printf("\033[1;31m  \u2663  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                        case REINA:
+                            printf("\033[1;31m  \u2665  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                        case REY:
+                            printf("\033[1;31m  \u2666  \033[0m"); // Rojo para las primeras fichas
+                            break;
+                    }
+                    break;
+                case NEGRO:
+                    switch (tablero[i][j].tipo) {
+                        case VACIO:
+                            printf("     ");
+                            break;
+                        case PEON:
+                            printf("\033[1;35m  \u25A0  \033[0m"); // Magenta para las fichas negras
+                            break;
+                        case TORRE:
+                            printf("\033[1;35m  \u2660  \033[0m"); // Magenta para las fichas negras
+                            break;
+                        case CABALLO:
+                            printf("\033[1;35m  \xC2\xA7  \033[0m"); // Magenta para las fichas negras
+                            break;
+                        case ALFIL:
+                            printf("\033[1;35m  \u2663  \033[0m"); // Magenta para las fichas negras
+                            break;
+                        case REINA:
+                            printf("\033[1;35m  \u2665  \033[0m"); // Magenta para las fichas negras
+                            break;
+                        case REY:
+                            printf("\033[1;35m  \u2666  \033[0m"); // Magenta para las fichas negras
+                            break;
+                    }
+                    break;
+            }
+            printf("\033[0m"); // Restaurar color original
+        }
+        printf("|\n");
+    }
+    printf("  ");
+    for (int k = 0; k < TAM_TABLERO; k++) {
+        printf("+-----");
+    }
+    printf("+\n");
+}
+
+void imprimir_simbolos() {
+    printf("Símbolos de las piezas de ajedrez:\n");
+    printf("PEON:     \u25A0  (♟ )\n");
+    printf("TORRE:    \u2660  (♜ )\n");
+    printf("CABALLO:  \xC2\xA7  (♞ )\n");
+    printf("ALFIL:    \u2663  (♝ )\n");
+    printf("REINA:    \u2665  (♛ )\n");
+    printf("REY:      \u2666  (♚ )\n");
 }
