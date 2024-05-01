@@ -19,7 +19,7 @@ EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO]
                     return JUEGO_TERMINADO;
                 }
             }
-            if (realizar_movimiento(tablero, BLANCO)) {
+            if (realizar_movimiento(tablero, tablero_copia, BLANCO)) {
                 if (rey_en_jaque(tablero, BLANCO)) {
                     // Deshacer el último movimiento si el rey sigue en jaque
                     deshacer_ultimo_movimiento(tablero, tablero_copia);
@@ -46,7 +46,7 @@ EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO]
                     return JUEGO_TERMINADO;
                 }
             }
-            if (realizar_movimiento(tablero, NEGRO)) {
+            if (realizar_movimiento(tablero, tablero_copia,NEGRO)) {
                 if (rey_en_jaque(tablero, NEGRO)) {
                     // Deshacer el último movimiento si el rey sigue en jaque
                     deshacer_ultimo_movimiento(tablero, tablero_copia);
@@ -64,10 +64,17 @@ EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO]
     }
 }
 
-int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color) {
+
+int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO], int color) {
     int fila_origen, columna_origen, fila_destino, columna_destino;
     printf("Ingrese la ficha que desea mover (fila columna): ");
     scanf("%d %d", &fila_origen, &columna_origen);
+
+    if (fila_origen == 9 && columna_origen == 9) {
+        deshacer_ultimo_movimiento(tablero, tablero_copia);
+        printf("Cambio de turno.\n");
+        return 2; // Indicar cambio de turno
+    }
 
     if (fila_origen < 0 || fila_origen >= TAM_TABLERO || columna_origen < 0 || columna_origen >= TAM_TABLERO) {
         printf("Posición de origen inválida.\n");
@@ -87,7 +94,9 @@ int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color) {
         return 0; // Movimiento inválido
     }
 
-    int movimiento_valido = movimientos(tablero, tablero[fila_origen][columna_origen].tipo, fila_origen, columna_origen, fila_destino, columna_destino);
+    int primer_movimiento = (tablero[fila_origen][columna_origen].tipo == PEON && fila_origen == 1 && fila_destino == 3) || (fila_origen == 6 && fila_destino == 4);
+
+    int movimiento_valido = movimientos(tablero, tablero[fila_origen][columna_origen].tipo, fila_origen, columna_origen, fila_destino, columna_destino, primer_movimiento);
     if (!movimiento_valido) {
         printf("Movimiento inválido.\n");
         return 0; // Movimiento inválido
@@ -98,13 +107,14 @@ int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color) {
     return 1; // Movimiento válido
 }
 
-int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_origen, int columna_origen, int fila_destino, int columna_destino) {
+int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_origen, int columna_origen, int fila_destino, int columna_destino, int primer_movimiento) {
     switch (ficha) {
         case VACIO:
             printf("-");
             break;
-        case PEON:
-            return peon(tablero, fila_origen, columna_origen, fila_destino, columna_destino);
+       case PEON:
+            return peon(tablero, fila_origen, columna_origen, fila_destino, columna_destino, 0); // Pasar 0 para indicar que no es el primer movimiento
+            break;
         case TORRE:
             return torre(tablero, fila_origen, columna_origen, fila_destino, columna_destino);
             break;
@@ -123,8 +133,7 @@ int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_ori
     }
     return 0; // Movimiento inválido
 }
-
-int peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino) {
+int peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino, int primer_movimiento) {
     // Implementa la lógica de movimiento y captura del peón
     if (fila_destino >= 0 && fila_destino < TAM_TABLERO && columna_destino >= 0 && columna_destino < TAM_TABLERO) {
         // Verificar si el movimiento es válido según la función puede_capturar_peon
@@ -132,24 +141,31 @@ int peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_o
             // Verificar si la casilla de destino está vacía
             if (tablero[fila_destino][columna_destino].tipo == VACIO) {
                 // Movimiento hacia una casilla vacía
-                if (columna_destino == columna_origen && fila_destino != fila_origen) { // Movimiento hacia adelante
-                    tablero[fila_destino][columna_destino] = tablero[fila_origen][columna_origen]; // Mover la pieza
-                    tablero[fila_origen][columna_origen].tipo = VACIO; // Limpiar la casilla de origen
-                    return 1; // Movimiento exitoso
-                } else if ((fila_destino == fila_origen - 1 && columna_destino == columna_origen + 1) || // Movimiento diagonal derecho
-                    (fila_destino == fila_origen - 1 && columna_destino == columna_origen - 1)) { // Movimiento diagonal izquierdo
-                    // Se intenta capturar una pieza enemiga en diagonal
-                    if (tablero[fila_destino][columna_destino].color != tablero[fila_origen][columna_origen].color) {
-                        printf("¡Has capturado una pieza enemiga!\n");
-                        tablero[fila_destino][columna_destino].tipo = VACIO; // Eliminar la pieza enemiga
-                        tablero[fila_destino][columna_destino].color = -1; // Actualizar el color de la casilla de destino
+                if (columna_destino == columna_origen && fila_destino != fila_origen) { // Movimiento en la misma columna
+                    if (fila_destino != fila_origen) { // Movimiento hacia adelante de una casilla
                         tablero[fila_destino][columna_destino] = tablero[fila_origen][columna_origen]; // Mover la pieza
                         tablero[fila_origen][columna_origen].tipo = VACIO; // Limpiar la casilla de origen
                         return 1; // Movimiento exitoso
+                    } else if (primer_movimiento && fila_destino != fila_origen - 2) { // Permitir el movimiento de dos casillas solo en el primer movimiento
+                        // Verificar que la casilla intermedia esté vacía
+                        if (tablero[fila_origen - 1][columna_origen].tipo == VACIO) {
+                            tablero[fila_destino][columna_destino] = tablero[fila_origen][columna_origen]; // Mover la pieza
+                            tablero[fila_origen][columna_origen].tipo = VACIO; // Limpiar la casilla de origen
+                            return 1; // Movimiento exitoso
+                        } else {
+                            printf("¡Movimiento inválido! El peón solo puede avanzar dos casillas si la casilla intermedia está vacía.\n");
+                            return 0; // Movimiento inválido
+                        }
                     } else {
-                        printf("¡Movimiento inválido! No se puede capturar una pieza si no hay ninguna enemiga en esa casilla.\n");
+                        printf("¡Movimiento inválido! El peón solo puede avanzar una casilla o dos casillas en su primer movimiento.\n");
                         return 0; // Movimiento inválido
                     }
+                } else if ((fila_destino == fila_origen - 1 && (columna_destino == columna_origen + 1 || columna_destino == columna_origen - 1)) && 
+                        tablero[fila_destino][columna_destino].color != tablero[fila_origen][columna_origen].color) {
+                    // Movimiento diagonal para capturar
+                    tablero[fila_destino][columna_destino] = tablero[fila_origen][columna_origen]; // Mover la pieza
+                    tablero[fila_origen][columna_origen].tipo = VACIO; // Limpiar la casilla de origen
+                    return 1; // Movimiento exitoso
                 } else {
                     printf("¡Movimiento inválido! El peón solo puede moverse hacia adelante o capturar en diagonal.\n");
                     return 0; // Movimiento inválido

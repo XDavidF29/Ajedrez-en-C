@@ -14,11 +14,11 @@ typedef enum {
 //Funcionar manejar turnos
 EstadoJuego manejar_turnos(EstadoJuego estado_actual, Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]);
 //Función para realizar movimientos
-int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color);
+int realizar_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO], int color);
 //Funcion para manejar movimientos de todas las fichas 
-int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_origen, int columna_origen, int fila_destino, int columna_destino);
+int movimientos(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int ficha, int fila_origen, int columna_origen, int fila_destino, int columna_destino, int primer_movimiento);
 //Funcion movimiento peon
-int peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino);
+int peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino, int primer_movimiento);
 //Funcion movimiento torre
 int torre(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino);
 //Funcion movimiento caballo

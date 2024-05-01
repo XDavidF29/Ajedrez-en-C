@@ -16,8 +16,10 @@ int puede_bloquear_ataque(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_piez
 int rey_en_jaque_despues_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int color_rey, int fila_rey, int columna_rey, int nueva_fila, int nueva_columna);
 //Copia temporal del tablero para que  no afecte al original en el caso de haber escapado del jaque
 void copiar_tablero(Pieza tablero_original[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]);
-//Revertir Movimiento
+//Revertir Movimiento por Jaque
 void deshacer_ultimo_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]);
+//Revertir moviemiento de algun jugador
+void deshacer_penultimo_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]);
 //Capturar Peon
 int puede_capturar_peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino);
 //Capturar Torre

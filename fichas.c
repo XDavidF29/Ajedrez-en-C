@@ -240,6 +240,11 @@ void deshacer_ultimo_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza t
     }
 }
 
+void deshacer_penultimo_movimiento(Pieza tablero[TAM_TABLERO][TAM_TABLERO], Pieza tablero_copia[TAM_TABLERO][TAM_TABLERO]) {
+    // Copiar el tablero desde la copia
+    copiar_tablero(tablero_copia, tablero);
+}
+
 int puede_capturar_peon(Pieza tablero[TAM_TABLERO][TAM_TABLERO], int fila_origen, int columna_origen, int fila_destino, int columna_destino) {
     // Verificar si la casilla de destino está vacía
     if (tablero[fila_destino][columna_destino].tipo == VACIO) {
